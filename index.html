@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <!-- Meta cơ bản -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f0fdfa">
+    <meta name="color-scheme" content="light">
+    <meta name="description" content="Khám phá tính cách của bạn thông qua bài trắc nghiệm Big Five. Tìm hiểu 5 khía cạnh tính cách, điểm mạnh và tiềm năng phát triển bản thân.">
+
+    <title>Trắc Nghiệm Tính Cách Big Five - Khám Phá Bản Thân</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js: Biểu đồ kết quả trắc nghiệm -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Cấu hình Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+
+                    colors: {
+                        primary: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        },
+
+                        accent: {
+                            cyan: '#06b6d4',
+                            purple: '#8b5cf6',
+                            pink: '#ec4899',
+                            blue: '#3b82f6',
+                        },
+
+                        surface: '#ffffff',
+                        background: '#f8fafc',
+                    },
+
+                    boxShadow: {
+                        soft: '0 4px 24px rgba(15, 118, 110, 0.08)',
+                        card: '0 10px 40px rgba(15, 23, 42, 0.06)',
+                        glow: '0 0 30px rgba(20, 184, 166, 0.18)',
+                    },
+
+                    borderRadius: {
+                        '4xl': '2rem',
+                    },
+
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'float': 'float 4s ease-in-out infinite',
+                        'pulse-soft': 'pulseSoft 2.5s ease-in-out infinite',
+                    },
+
+                    keyframes: {
+                        fadeIn: {
+                            '0%': {
+                                opacity: '0',
+                            },
+                            '100%': {
+                                opacity: '1',
+                            },
+                        },
+
+                        slideUp: {
+                            '0%': {
+                                opacity: '0',
+                                transform: 'translateY(20px)',
+                            },
+                            '100%': {
+                                opacity: '1',
+                                transform: 'translateY(0)',
+                            },
+                        },
+
+                        float: {
+                            '0%, 100%': {
+                                transform: 'translateY(0)',
+                            },
+                            '50%': {
+                                transform: 'translateY(-8px)',
+                            },
+                        },
+
+                        pulseSoft: {
+                            '0%, 100%': {
+                                boxShadow: '0 0 0 0 rgba(20, 184, 166, 0.15)',
+                            },
+                            '50%': {
+                                boxShadow: '0 0 0 10px rgba(20, 184, 166, 0)',
+                            },
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+
+    <!-- CSS tùy chỉnh -->
+    <style>
+        /* ========================================
+           1. BIẾN MÀU VÀ THIẾT LẬP CHUNG
+        ======================================== */
+        :root {
+            --color-primary: #14b8a6;
+            --color-primary-dark: #0f766e;
+            --color-primary-light: #ccfbf1;
+
+            --color-text: #1e293b;
+            --color-muted: #64748b;
+
+            --color-background: #f8fafc;
+            --color-surface: #ffffff;
+
+            --radius-card: 20px;
+
+            --shadow-card:
+                0 8px 30px rgba(15, 23, 42, 0.05);
+
+            --shadow-hover:
+                0 16px 40px rgba(15, 118, 110, 0.12);
+
+            --transition:
+                all 0.3s ease;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 24px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--color-text);
+            background-color: var(--color-background);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::selection {
+            color: #134e4a;
+            background-color: #99f6e4;
+        }
+
+        /* ========================================
+           2. THANH CUỘN TÙY CHỈNH
+        ======================================== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #99f6e4;
+            border-radius: 999px;
+            border: 2px solid #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5eead4;
+        }
+
+        /* ========================================
+           3. NỀN GRADIENT VÀ HIỆU ỨNG TRANG TRÍ
+        ======================================== */
+        .page-background {
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(153, 246, 228, 0.24),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at 90% 20%,
+                    rgba(196, 181, 253, 0.18),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #f8fafc 0%,
+                    #f0fdfa 50%,
+                    #f8fafc 100%
+                );
+        }
+
+        .gradient-text {
+            color: #0d9488;
+            background: linear-gradient(
+                135deg,
+                #0d9488 0%,
+                #06b6d4 50%,
+                #8b5cf6 100%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-primary {
+            background: linear-gradient(
+                135deg,
+                #14b8a6 0%,
+                #06b6d4 100%
+            );
+        }
+
+        .gradient-hero {
+            background: linear-gradient(
+                135deg,
+                #ccfbf1 0%,
+                #ecfeff 45%,
+                #ede9fe 100%
+            );
+        }
+
+        .decorative-blur {
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ========================================
+           4. THẺ NỘI DUNG
+        ======================================== */
+        .card {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(226, 232, 240, 0.85);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .question-card {
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            transition: var(--transition);
+        }
+
+        .question-card:hover {
+            border-color: #99f6e4;
+            box-shadow: 0 8px 24px rgba(20, 184, 166, 0.07);
+        }
+
+        .question-card:focus-within {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.10);
+        }
+
+        /* ========================================
+           5. RADIO BUTTON VÀ LỰA CHỌN
+        ======================================== */
+        .radio-custom {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            clip-path: inset(50%);
+        }
+
+        .radio-custom + div {
+            position: relative;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            background: #ffffff;
+            color: #475569;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .radio-custom + div:hover {
+            border-color: #5eead4;
+            background-color: #f0fdfa;
+            color: #0f766e;
+            transform: translateY(-2px);
+        }
+
+        .radio-custom:checked + div {
+            border-color: #14b8a6;
+            background: linear-gradient(
+                135deg,
+                #ccfbf1 0%,
+                #ecfeff 100%
+            );
+            color: #0f766e;
+            box-shadow: 0 4px 14px rgba(20, 184, 166, 0.12);
+            transform: scale(1.02);
+        }
+
+        .radio-custom:checked + div::after {
+            content: '\\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            font-size: 12px;
+            color: #0d9488;
+        }
+
+        .radio-custom:focus-visible + div {
+            outline: 3px solid rgba(20, 184, 166, 0.35);
+            outline-offset: 3px;
+        }
+
+        /* ========================================
+           6. NÚT BẤM
+        ======================================== */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: 1px solid transparent;
+            border-radius: 14px;
+            background: linear-gradient(
+                135deg,
+                #14b8a6,
+                #0891b2
+            );
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 6px 18px rgba(20, 184, 166, 0.2);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(20, 184, 166, 0.28);
+            filter: saturate(1.1);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn-primary:focus-visible,
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid rgba(20, 184, 166, 0.45);
+            outline-offset: 3px;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            background: #ffffff;
+            color: #334155;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            border-color: #5eead4;
+            background: #f0fdfa;
+            color: #0f766e;
+        }
+
+        /* ========================================
+           7. THANH TIẾN TRÌNH
+        ======================================== */
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #e2e8f0;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(
+                90deg,
+                #14b8a6 0%,
+                #06b6d4 60%,
+                #8b5cf6 100%
+            );
+            transition: width 0.5s ease;
+        }
+
+        /* ========================================
+           8. NHÃN VÀ BIỂU TƯỢNG
+        ======================================== */
+        .icon-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(
+                135deg,
+                #ccfbf1,
+                #cffafe
+            );
+            color: #0f766e;
+            flex-shrink: 0;
+        }
+
+        .badge-soft {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 1px solid #99f6e4;
+            border-radius: 999px;
+            background: #f0fdfa;
+            color: #0f766e;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* ========================================
+           9. BIỂU ĐỒ KẾT QUẢ
+        ======================================== */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            min-height: 260px;
+            max-height: 420px;
+            margin-inline: auto;
+        }
+
+        canvas {
+            max-width: 100%;
+        }
+
+        /* ========================================
+           10. HIỆU ỨNG CHUYỂN ĐỘNG
+        ======================================== */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out both;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.6s ease-out both;
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* ========================================
+           11. RESPONSIVE
+        ======================================== */
+        @media (max-width: 640px) {
+            :root {
+                --radius-card: 16px;
+            }
+
+            .question-card {
+                border-radius: 14px;
+            }
+
+            .radio-custom + div:hover {
+                transform: none;
+            }
+
+            .radio-custom:checked + div {
+                transform: none;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                padding: 11px 18px;
+                font-size: 14px;
+            }
+
+            .chart-container {
+                min-height: 220px;
+            }
+        }
+
+        /* ========================================
+           12. HỖ TRỢ NGƯỜI DÙNG NHẠY CẢM CHUYỂN ĐỘNG
+        ======================================== */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-full text-slate-800 flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-indigo-100 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-md">
+                    <i class="fa-solid fa-brain text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-slate-900">Big Five Personality Test_A3</h1>
+                    <p class="text-xs text-slate-500">Khám phá 5 chiều kích cốt lõi của tính cách</p>
+                </div>
+            </div>
+            <div id="progress-indicator" class="hidden text-sm font-semibold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-100">
+                Câu hỏi <span id="current-q">1</span> / <span id="total-q">45</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8 flex flex-col justify-center">
+
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="bg-white rounded-3xl shadow-xl border border-indigo-50 p-8 md:p-12 text-center transition-all">
+            <div class="w-20 h-20 bg-indigo-100 text-indigo-600 rounded-3xl mx-auto flex items-center justify-center text-3xl mb-6 shadow-inner">
+                <i class="fa-solid fa-compass"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold text-slate-900 mb-4 tracking-tight">Trắc Nghiệm Tính Cách 5 Yếu Tố (Big Five)</h2>
+            <p class="text-slate-600 max-w-xl mx-auto mb-8 leading-relaxed">
+                Mô hình Big Five là phương pháp khoa học uy tín nhất để đo lường cấu trúc tính cách con người thông qua 5 nhóm: 
+                <span class="font-semibold text-indigo-600">Độ cởi mở, Tính tận tâm, Tính hướng ngoại, Tính dễ chịu, và Bất ổn cảm xúc</span>.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left max-w-xl mx-auto mb-8 text-sm text-slate-600">
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center space-x-3">
+                    <i class="fa-regular fa-clock text-indigo-500 text-lg"></i>
+                    <div>
+                        <p class="font-semibold text-slate-800">Thời gian</p>
+                        <p>Khoảng 5-7 phút</p>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center space-x-3">
+                    <i class="fa-regular fa-file-lines text-indigo-500 text-lg"></i>
+                    <div>
+                        <p class="font-semibold text-slate-800">Số câu hỏi</p>
+                        <p>45 câu hỏi chuẩn hóa</p>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center space-x-3">
+                    <i class="fa-solid fa-chart-pie text-indigo-500 text-lg"></i>
+                    <div>
+                        <p class="font-semibold text-slate-800">Kết quả</p>
+                        <p>Biểu đồ & Giải mã OCEAN</p>
+                    </div>
+                </div>
+            </div>
+            <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-4 rounded-2xl shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-0.5 active:translate-y-0 text-lg flex items-center justify-center mx-auto space-x-2">
+                <span>Bắt đầu ngay</span>
+                <i class="fa-solid fa-arrow-right text-sm"></i>
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden bg-white rounded-3xl shadow-xl border border-indigo-50 p-6 md:p-10 transition-all">
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-100 h-2.5 rounded-full mb-8 overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Card -->
+            <div id="question-container" class="mb-8">
+                <span id="question-category" class="inline-block text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg mb-3">Nhóm</span>
+                <h3 id="question-text" class="text-xl md:text-2xl font-bold text-slate-900 leading-snug"></h3>
+            </div>
+
+            <!-- Likert Scale Options -->
+            <div class="space-y-3 mb-8" id="options-container">
+                <!-- Options injected via JavaScript -->
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                <button id="prev-btn" onclick="prevQuestion()" class="hidden px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-all flex items-center space-x-2">
+                    <i class="fa-solid fa-arrow-left text-sm"></i>
+                    <span>Quay lại</span>
+                </button>
+                <div class="ml-auto">
+                    <button id="next-btn" onclick="nextQuestion()" disabled class="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold px-8 py-3 rounded-xl shadow-md transition-all flex items-center space-x-2">
+                        <span id="next-btn-text">Tiếp theo</span>
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden bg-white rounded-3xl shadow-xl border border-indigo-50 p-6 md:p-10 transition-all">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-3xl mx-auto flex items-center justify-center text-2xl mb-4 shadow-inner">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Kết Quả Trắc Nghiệm Tính Cách Của Bạn</h2>
+                <p class="text-slate-500 text-sm mt-1">Dưới đây là biểu đồ phân tích 5 chiều kích tính cách cùng tài liệu giải mã chi tiết mô hình OCEAN.</p>
+            </div>
+
+            <!-- Chart Container -->
+            <div class="max-w-md mx-auto mb-10 bg-slate-50 p-4 rounded-3xl border border-slate-100">
+                <canvas id="radarChart"></canvas>
+            </div>
+
+            <!-- Detailed Breakdowns -->
+            <h3 class="font-bold text-xl text-slate-900 mb-4 flex items-center space-x-2">
+                <i class="fa-solid fa-list-check text-indigo-600"></i>
+                <span>Chi tiết điểm số từng nhóm của bạn</span>
+            </h3>
+            <div id="trait-descriptions" class="space-y-4 mb-8">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <!-- OCEAN Explanation Section -->
+            <div class="bg-indigo-50/60 border border-indigo-100 rounded-3xl p-6 md:p-8 mb-8">
+                <h3 class="font-extrabold text-xl text-indigo-950 mb-4 flex items-center space-x-3">
+                    <i class="fa-solid fa-book-open text-indigo-600"></i>
+                    <span>Tìm hiểu về Mô hình OCEAN (Big Five) là gì?</span>
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                    Bảng chữ cái <strong>OCEAN</strong> là viết tắt của 5 chiều kích tâm lý học cơ bản cấu thành nên toàn bộ nhân cách con người. Mô hình này được nghiên cứu và chuẩn hóa qua nhiều thập kỷ, không dùng để dán nhãn tốt/xấu mà phản ánh xu hướng tự nhiên của mỗi cá nhân trong cách suy nghĩ, cảm nhận và hành xử:
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-indigo-100 shadow-sm">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <span class="w-3 h-3 rounded-full bg-indigo-600"></span>
+                            <h4 class="font-bold text-slate-900 text-sm">O - Openness (Độ cởi mở)</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">Đo lường mức độ tò mò trí tuệ, sự sáng tạo, sở thích nghệ thuật và thái độ đón nhận những trải nghiệm, tư tưởng mới lạ.</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-indigo-100 shadow-sm">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <span class="w-3 h-3 rounded-full bg-emerald-600"></span>
+                            <h4 class="font-bold text-slate-900 text-sm">C - Conscientiousness (Tính tận tâm)</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">Phản ánh mức độ kỷ luật, tinh thần trách nhiệm, khả năng tổ chức công việc, sự tỉ mỉ và định hướng mục tiêu dài hạn.</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-indigo-100 shadow-sm">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                            <h4 class="font-bold text-slate-900 text-sm">E - Extraversion (Tính hướng ngoại)</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">Thể hiện xu hướng tìm kiếm năng lượng từ các mối quan hệ xã hội, sự năng nổ, nhiệt tình, thích giao lưu hay ưu tiên sự tĩnh lặng nội tâm.</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-indigo-100 shadow-sm">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <span class="w-3 h-3 rounded-full bg-pink-500"></span>
+                            <h4 class="font-bold text-slate-900 text-sm">A - Agreeableness (Tính dễ chịu)</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">Đo lường lòng trắc ẩn, sự hợp tác, thái độ ôn hòa, vị tha và cách bạn ưu tiên sự hòa hợp trong các mối quan hệ cộng đồng.</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-indigo-100 shadow-sm md:col-span-2">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <span class="w-3 h-3 rounded-full bg-purple-600"></span>
+                            <h4 class="font-bold text-slate-900 text-sm">N - Neuroticism (Bất ổn cảm xúc / Nhạy cảm)</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">Chỉ mức độ nhạy cảm trước áp lực, khả năng quản lý căng thẳng, sự biến động tâm trạng hoặc tính vững vàng, kiên cường trước biến cố cuộc sống.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4 border-t border-slate-100">
+                <button onclick="restartQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>Làm lại bài trắc nghiệm</span>
+                </button>
+                <button onclick="window.print()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-print"></i>
+                    <span>In hoặc Lưu kết quả</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 text-center text-xs text-slate-400">
+        <p>Phát triển dựa trên mô hình tâm lý học OCEAN (Big Five Personality Traits_A3).</p>
+        <p>Thuộc quyền sở hữu của Winni</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Danh sách 45 câu hỏi trắc nghiệm Big Five (chia đều 5 nhóm O, C, E, A, N - mỗi nhóm 9 câu)
+        const questions = [
+            // --- 1. Độ cởi mở (Openness to Experience) - 9 câu ---
+            { id: 1, category: "Độ cởi mở (Openness)", text: "Tôi là người có trí tưởng tượng phong phú và thích sáng tạo ra nhiều ý tưởng mới.", trait: "O", reverse: false },
+            { id: 2, category: "Độ cởi mở (Openness)", text: "Tôi có hứng thú sâu sắc với nghệ thuật, âm nhạc, thơ ca hoặc văn học.", trait: "O", reverse: false },
+            { id: 3, category: "Độ cởi mở (Openness)", text: "Tôi thích những hoạt động quen thuộc, lặp đi lặp lại hơn là thử nghiệm những thứ mới lạ.", trait: "O", reverse: true },
+            { id: 4, category: "Độ cởi mở (Openness)", text: "Tôi tò mò về nhiều chủ đề khác nhau và thích tìm hiểu cách thế giới vận hành.", trait: "O", reverse: false },
+            { id: 5, category: "Độ cởi mở (Openness)", text: "Tôi thích những lịch trình rõ ràng, truyền thống và tránh những thay đổi đột ngột.", trait: "O", reverse: true },
+            { id: 6, category: "Độ cởi mở (Openness)", text: "Tôi thích suy ngẫm về những triết lý sống, ý nghĩa tồn tại và các vấn đề trừu tượng.", trait: "O", reverse: false },
+            { id: 7, category: "Độ cởi mở (Openness)", text: "Tôi thấy những buổi triển lãm nghệ thuật hiện đại hoặc hàn lâm khá nhàm chán và vô nghĩa.", trait: "O", reverse: true },
+            { id: 8, category: "Độ cởi mở (Openness)", text: "Tôi thích thử nghiệm các món ăn lạ, phong cách âm nhạc mới hoặc du lịch đến những vùng đất ít người biết.", trait: "O", reverse: false },
+            { id: 9, category: "Độ cởi mở (Openness)", text: "Tôi thường không có hứng thú với những ý tưởng mang tính lý thuyết suông hoặc mơ mộng.", trait: "O", reverse: true },
+
+            // --- 2. Tính tận tâm (Conscientiousness) - 9 câu ---
+            { id: 10, category: "Tính tận tâm (Conscientiousness)", text: "Tôi luôn hoàn thành công việc đúng hạn, có kế hoạch và cực kỳ cẩn thận.", trait: "C", reverse: false },
+            { id: 11, category: "Tính tận tâm (Conscientiousness)", text: "Tôi thường để đồ đạc bừa bộn, không ngăn nắp và làm việc ngẫu hứng theo cảm xúc.", trait: "C", reverse: true },
+            { id: 12, category: "Tính tận tâm (Conscientiousness)", text: "Tôi chú trọng đến từng chi tiết nhỏ và luôn đặt tiêu chuẩn cao cho công việc.", trait: "C", reverse: false },
+            { id: 13, category: "Tính tận tâm (Conscientiousness)", text: "Đôi khi tôi dễ bị xao lãng và khó duy trì sự tập trung dài hạn để hoàn thành mục tiêu.", trait: "C", reverse: true },
+            { id: 14, category: "Tính tận tâm (Conscientiousness)", text: "Tôi là người đáng tin cậy, luôn giữ chữ tín và có trách nhiệm cao với lời hứa.", trait: "C", reverse: false },
+            { id: 15, category: "Tính tận tâm (Conscientiousness)", text: "Tôi thường xuyên để nước đến chân mới nhảy hoặc hoàn thành công việc sát nút thời hạn.", trait: "C", reverse: true },
+            { id: 16, category: "Tính tận tâm (Conscientiousness)", text: "Tôi lập danh sách chi tiết những việc cần làm mỗi ngày và tuân thủ nghiêm ngặt theo đó.", trait: "C", reverse: false },
+            { id: 17, category: "Tính tận tâm (Conscientiousness)", text: "Không gian làm việc và phòng ngủ của tôi đôi khi khá lộn xộn, thiếu ngăn nắp.", trait: "C", reverse: true },
+            { id: 18, category: "Tính tận tâm (Conscientiousness)", text: "Tôi luôn suy nghĩ kỹ càng và chuẩn bị phương án dự phòng trước khi bắt tay làm việc gì.", trait: "C", reverse: false },
+
+            // --- 3. Tính hướng ngoại (Extraversion) - 9 câu ---
+            { id: 19, category: "Tính hướng ngoại (Extraversion)", text: "Tôi cảm thấy tràn đầy năng lượng khi được giao lưu, kết nối ở các buổi tiệc đông người.", trait: "E", reverse: false },
+            { id: 20, category: "Tính hướng ngoại (Extraversion)", text: "Tôi thích sự yên tĩnh, không gian riêng tư và nhanh thấy mệt mỏi khi ở nơi quá náo nhiệt.", trait: "E", reverse: true },
+            { id: 21, category: "Tính hướng ngoại (Extraversion)", text: "Tôi thoải mái khi đứng trước đám đông và dễ dàng bắt chuyện với người lạ.", trait: "E", reverse: false },
+            { id: 22, category: "Tính hướng ngoại (Extraversion)", text: "Tôi là người kín tiếng, ít bộc lộ cảm xúc riêng tư trước mặt người khác.", trait: "E", reverse: true },
+            { id: 23, category: "Tính hướng ngoại (Extraversion)", text: "Tôi có xu hướng chủ động dẫn dắt, sôi nổi trong các cuộc trò chuyện nhóm.", trait: "E", reverse: false },
+            { id: 24, category: "Tính hướng ngoại (Extraversion)", text: "Trong một buổi tiệc, tôi thường chọn đứng ở góc khuất hoặc chỉ trò chuyện với một vài người quen.", trait: "E", reverse: true },
+            { id: 25, category: "Tính hướng ngoại (Extraversion)", text: "Tôi thích tham gia các hoạt động cộng đồng, sự kiện đông người và là trung tâm của sự chú ý.", trait: "E", reverse: false },
+            { id: 26, category: "Tính hướng ngoại (Extraversion)", text: "Tôi cảm thấy việc phải xã giao liên tục làm mình cạn kiệt năng lượng và cần thời gian một mình để sạc pin.", trait: "E", reverse: true },
+            { id: 27, category: "Tính hướng ngoại (Extraversion)", text: "Tôi có vòng bạn bè rộng và rất thích kết nối, mở rộng quan hệ mới mỗi ngày.", trait: "E", reverse: false },
+
+            // --- 4. Tính dễ chịu (Agreeableness) - 9 câu ---
+            { id: 28, category: "Tính dễ chịu (Agreeableness)", text: "Tôi luôn quan tâm, đồng cảm sâu sắc với cảm xúc và hoàn cảnh của người khác.", trait: "A", reverse: false },
+            { id: 29, category: "Tính dễ chịu (Agreeableness)", text: "Tôi sẵn sàng tranh cãi đến cùng để bảo vệ quan điểm của mình, kể cả khi làm mất lòng người khác.", trait: "A", reverse: true },
+            { id: 30, category: "Tính dễ chịu (Agreeableness)", text: "Tôi thích hợp tác, hòa giải xung đột và ưu tiên sự hòa hợp trong các mối quan hệ.", trait: "A", reverse: false },
+            { id: 31, category: "Tính dễ chịu (Agreeableness)", text: "Tôi có xu hướng nghi ngờ động cơ của người khác và giữ khoảng cách nhất định.", trait: "A", reverse: true },
+            { id: 32, category: "Tính dễ chịu (Agreeableness)", text: "Tôi hào phóng, sẵn lòng giúp đỡ mọi người xung quanh mà không vụ lợi.", trait: "A", reverse: false },
+            { id: 33, category: "Tính dễ chịu (Agreeableness)", text: "Tôi sẵn sàng nhường nhịn và chấp nhận phần thiệt thòi về mình để giữ gìn hòa khí.", trait: "A", reverse: false },
+            { id: 34, category: "Tính dễ chịu (Agreeableness)", text: "Tôi dễ cảm thấy khó chịu hoặc châm biếm khi ai đó làm trái ý hoặc bất cẩn.", trait: "A", reverse: true },
+            { id: 35, category: "Tính dễ chịu (Agreeableness)", text: "Tôi luôn tin rằng bản chất con người là tốt đẹp và sẵn lòng tha thứ cho lỗi lầm của họ.", trait: "A", reverse: false },
+            { id: 36, category: "Tính dễ chịu (Agreeableness)", text: "Đôi khi tôi tỏ ra khá cứng nhắc và khô khan trong cách đối xử với người khác.", trait: "A", reverse: true },
+
+            // --- 5. Tính bất ổn cảm xúc / Nhạy cảm (Neuroticism) - 9 câu ---
+            { id: 37, category: "Tính bất ổn cảm xúc (Neuroticism)", text: "Tôi dễ cảm thấy lo âu, căng thẳng hoặc bồn chồn khi đối mặt với áp lực nhỏ.", trait: "N", reverse: false },
+            { id: 38, category: "Tính bất ổn cảm xúc (Neuroticism)", text: "Tôi giữ được sự bình tĩnh, vững vàng và ít khi bị hoảng loạn trước biến cố.", trait: "N", reverse: true },
+            { id: 39, category: "Tính bất ổn cảm xúc (Neuroticism)", text: "Tâm trạng của tôi thay đổi thất thường, dễ vui buồn bất chợt theo ngoại cảnh.", trait: "N", reverse: false },
+            { id: 40, category: "Tính bất ổn cảm xúc (Neuroticism)", text: "Tôi thường tự tin vào khả năng của bản thân và ít khi suy nghĩ tiêu cực vẩn vơ.", trait: "N", reverse: true },
+            { id: 41, category: "Tính bất ổn cảm xúc (Neuroticism)", text: "Tôi hay trăn trở, suy nghĩ nhiều về những lỗi lầm hoặc lời chê bai trong quá khứ.", trait: "N", reverse: false },
+            { id: 42, category: "Tính bất ổn cảm xúc (Neuroticism)", text: "Tôi thường xuyên cảm thấy bất an về tương lai và lo lắng rằng những điều tồi tệ sắp xảy ra.", trait: "N", reverse: false },
+            { id: 43, category: "Tính bất ổn cảm xúc (Neuroticism)", text: "Tôi có khả năng phục hồi tinh thần rất nhanh sau những cú sốc hoặc thất bại lớn trong đời.", trait: "N", reverse: true },
+            { id: 44, category: "Tính bất ổn cảm xúc (Neuroticism)", text: "Những lời chỉ trích dù là nhỏ từ người khác cũng dễ làm tôi trăn trở và suy nghĩ tiêu cực nhiều ngày.", trait: "N", reverse: false },
+            { id: 45, category: "Tính bất ổn cảm xúc (Neuroticism)", text: "Nhìn chung, tôi cảm thấy hài lòng với cuộc sống hiện tại và ít khi bị stress chi phối.", trait: "N", reverse: true }
+        ];
+
+        const likertOptions = [
+            { score: 1, label: "Hoàn toàn không đồng ý" },
+            { score: 2, label: "Không đồng ý" },
+            { score: 3, label: "Trung lập / Phân vân" },
+            { score: 4, label: "Đồng ý" },
+            { score: 5, label: "Hoàn toàn đồng ý" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = {}; // Lưu đáp án theo id câu hỏi
+
+        const traitMeta = {
+            O: {
+                name: "Độ cởi mở (Openness)",
+                color: "rgb(99, 102, 241)",
+                bg: "bg-indigo-50",
+                textCol: "text-indigo-600",
+                descHigh: "Bạn là người sáng tạo, phóng khoáng, thích khám phá những tri thức mới, nghệ thuật và trải nghiệm độc đáo.",
+                descLow: "Bạn thực tế, thích sự ổn định, quen thuộc, ưu tiên truyền thống và các giải pháp thực tiễn đã được kiểm chứng."
+            },
+            C: {
+                name: "Tính tận tâm (Conscientiousness)",
+                color: "rgb(16, 185, 129)",
+                bg: "bg-emerald-50",
+                textCol: "text-emerald-600",
+                descHigh: "Bạn cực kỳ có kỷ luật, ngăn nắp, tỉ mỉ, luôn có kế hoạch rõ ràng và đáng tin cậy trong mọi việc.",
+                descLow: "Bạn linh hoạt, ngẫu hứng, thoải mái với sự tự do và ít khi bị gò bó bởi các quy tắc cứng nhắc."
+            },
+            E: {
+                name: "Tính hướng ngoại (Extraversion)",
+                color: "rgb(245, 158, 11)",
+                bg: "bg-amber-50",
+                textCol: "text-amber-600",
+                descHigh: "Bạn năng nổ, nhiệt tình, thích giao lưu, tỏa sáng trong đám đông và tràn đầy năng lượng xã hội.",
+                descLow: "Bạn điềm tĩnh, sâu sắc, thích tận hưởng không gian yên tĩnh và các cuộc trò chuyện sâu cá nhân."
+            },
+            A: {
+                name: "Tính dễ chịu (Agreeableness)",
+                color: "rgb(236, 72, 153)",
+                bg: "bg-pink-50",
+                textCol: "text-pink-600",
+                descHigh: "Bạn thấu cảm, ôn hòa, vị tha, luôn ưu tiên sự hòa hợp và sẵn lòng giúp đỡ cộng đồng.",
+                descLow: "Bạn thẳng thắn, quyết đoán, lý trí, đặt chân lý và sự thật lên trên cảm xúc cá nhân."
+            },
+            N: {
+                name: "Tính bất ổn cảm xúc (Neuroticism)",
+                color: "rgb(139, 92, 246)",
+                bg: "bg-purple-50",
+                textCol: "text-purple-600",
+                descHigh: "Bạn nhạy cảm sâu sắc với môi trường xung quanh, dễ xúc động và phản ứng mạnh với áp lực tâm lý.",
+                descLow: "Bạn vững vàng, kiên cường, kiểm soát cảm xúc tuyệt vời và giữ được sự điềm tĩnh trước mọi biến cố."
+            }
+        };
+
+        function startQuiz() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('progress-indicator').classList.remove('hidden');
+            document.getElementById('total-q').innerText = questions.length;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            document.getElementById('current-q').innerText = currentQuestionIndex + 1;
+            document.getElementById('question-category').innerText = q.category;
+            document.getElementById('question-text').innerText = q.text;
+
+            // Update Progress Bar
+            const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Render Options
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            likertOptions.forEach(opt => {
+                const isSelected = userAnswers[q.id] === opt.score;
+                const div = document.createElement('label');
+                div.className = `flex items-center p-4 rounded-2xl border-2 transition-all cursor-pointer select-none ${isSelected ? 'border-indigo-500 bg-indigo-50/50 text-indigo-900 shadow-sm' : 'border-slate-100 hover:border-slate-200 bg-white text-slate-700 hover:bg-slate-50'}`;
+                
+                div.innerHTML = `
+                    <input type="radio" name="question_${q.id}" value="${opt.score}" ${isSelected ? 'checked' : ''} class="hidden radio-custom" onchange="selectOption(${opt.score})">
+                    <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mr-4 shrink-d-0 transition-all ${isSelected ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-slate-300 bg-white'}">
+                        ${isSelected ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                    </div>
+                    <span class="font-medium text-base">${opt.label}</span>
+                `;
+                container.appendChild(div);
+            });
+
+            // Navigation state
+            const prevBtn = document.getElementById('prev-btn');
+            if (currentQuestionIndex > 0) {
+                prevBtn.classList.remove('hidden');
+            } else {
+                prevBtn.classList.add('hidden');
+            }
+
+            const nextBtn = document.getElementById('next-btn');
+            if (userAnswers[q.id] !== undefined) {
+                nextBtn.removeAttribute('disabled');
+            } else {
+                nextBtn.setAttribute('disabled', 'true');
+            }
+
+            if (currentQuestionIndex === questions.length - 1) {
+                document.getElementById('next-btn-text').innerText = "Xem kết quả";
+            } else {
+                document.getElementById('next-btn-text').innerText = "Tiếp theo";
+            }
+        }
+
+        function selectOption(score) {
+            const q = questions[currentQuestionIndex];
+            userAnswers[q.id] = score;
+            document.getElementById('next-btn').removeAttribute('disabled');
+            loadQuestion();
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function calculateScores() {
+            let scores = { O: 0, C: 0, E: 0, A: 0, N: 0 };
+            let counts = { O: 0, C: 0, E: 0, A: 0, N: 0 };
+
+            questions.forEach(q => {
+                let val = userAnswers[q.id];
+                if (q.reverse) {
+                    val = 6 - val; // Đảo chiều điểm số (1->5, 2->4, v.v.)
+                }
+                scores[q.trait] += val;
+                counts[q.trait] += 1;
+            });
+
+            let finalScores = {};
+            for (let trait in scores) {
+                let avg = scores[trait] / counts[trait];
+                finalScores[trait] = Math.round(((avg - 1) / 4) * 100); 
+            }
+            return finalScores;
+        }
+
+        let myRadarChart = null;
+
+        function showResults() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('progress-indicator').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const results = calculateScores();
+
+            // Render Chart
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            if (myRadarChart) {
+                myRadarChart.destroy();
+            }
+
+            myRadarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Độ cởi mở', 'Tính tận tâm', 'Tính hướng ngoại', 'Tính dễ chịu', 'Bất ổn cảm xúc'],
+                    datasets: [{
+                        label: 'Mức độ (%)',
+                        data: [results.O, results.C, results.E, results.A, results.N],
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        borderColor: 'rgb(99, 102, 241)',
+                        pointBackgroundColor: 'rgb(79, 70, 229)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(79, 70, 229)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(203, 213, 225, 0.5)' },
+                            grid: { color: 'rgba(203, 213, 225, 0.5)' },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { stepSize: 20, display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // Render Trait Descriptions
+            const descContainer = document.getElementById('trait-descriptions');
+            descContainer.innerHTML = '';
+
+            const traitsOrder = ['O', 'C', 'E', 'A', 'N'];
+            traitsOrder.forEach(t => {
+                const score = results[t];
+                const meta = traitMeta[t];
+                const isHigh = score >= 50;
+
+                const div = document.createElement('div');
+                div.className = `p-5 rounded-2xl border border-slate-100 bg-slate-50 flex flex-col md:flex-row md:items-center justify-between gap-4`;
+                div.innerHTML = `
+                    <div class="space-y-1 flex-grow">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-3 h-3 rounded-full" style="background-color: ${meta.color}"></span>
+                            <h4 class="font-bold text-slate-900">${meta.name}</h4>
+                            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full ${meta.bg} ${meta.textCol}">${score}%</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed mt-1">${isHigh ? meta.descHigh : meta.descLow}</p>
+                    </div>
+                    <div class="w-full md:w-48 bg-slate-200 h-2 rounded-full overflow-hidden shrink-0">
+                        <div class="h-full rounded-full transition-all duration-1000" style="width: ${score}%; background-color: ${meta.color}"></div>
+                    </div>
+                `;
+                descContainer.appendChild(div);
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('welcome-screen').classList.remove('hidden');
+        }
+        
+    </script>
+</body>
+</html>
